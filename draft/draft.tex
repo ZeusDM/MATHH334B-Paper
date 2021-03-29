@@ -1,0 +1,104 @@
+% !TEX TS-program = pdflatexmk
+\documentclass[11pt, letterpaper]{amsart}
+%\usepackage{amsaddr}
+
+\usepackage[isbn=false,url=false,doi=false,style=alphabetic]{biblatex} 
+\addbibresource{sample.bib}
+
+\usepackage{hyperref}
+
+\usepackage{enumitem}
+\setlist{itemsep=.5em, parsep = .5em} % < Usually a good idea
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+
+\newtheorem{thm}[]{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\theoremstyle{definition}
+\newtheorem{defn}[]{Definition}
+
+\DeclareMathOperator{\dist}{dist}
+
+\title{Bounds on Coding Theory from Algebraic Geometry}
+\author{Guilherme Zeus Dantas e Moura}
+%\address{Haverford College}
+%\email{gdantasemo@haverford.edu}
+%\date{Spring, 2021. Last change in \today}
+\date{last compiled \today}
+
+\begin{document}
+
+\begin{abstract}    
+    Coding theory is concerned with finding efficient ways to encode a message so that one may correct errors in the message. In algebraic coding theory, we study efficient codes generated from algebraic geometric methods.
+    
+    In my paper, I plan on constructing the Reed-Solomon codes, generalizing them using projective curves, and understand the results from \cite{TVZ82} on finding a bound better than the well-known Gilbert--Varshamov bound.
+\end{abstract} 
+
+\maketitle
+
+\section{Coding theory} \label{s:codingtheory}
+
+\begin{defn}[Code]
+    A \emph{code $C$ over an alphabet $A$} is a subset of $A^n = A \times \cdots \times A$.
+    We define $n$ as the \emph{length of $C$}.
+    A code $C$ over a field $A$ is a \emph{linear code} if $C$ is a vector subspace of $A^n$. An element of a code $C$ is called a \emph{code word}.
+\end{defn}
+
+In this paper, $A$ is a finite field unless otherwise stated.
+
+\begin{defn}[Hamming distance]
+    We define \emph{Hamming distance} between $\mathbf{x} = (x_1, \dots, x_n), \mathbf{y} = (y_1, \dots, y_n) \in A^n$ as
+    \[ \dist(\mathbf{x}, \mathbf{y}) = \#\left( x_i \neq y_i \mid i \in \{1, 2, \dots, n\} \right),\]
+    in other words, the number of positions $\mathbf{x}$ and $\mathbf{y}$ differ.
+\end{defn}
+
+\begin{prop}
+    Hamming distance is a metric over $A^n$, i.e., the following holds for any $\mathbf{x}, \mathbf{y}, \mathbf{z} \in A^n$:
+    \begin{itemize}[noitemsep]
+        \item $\dist(\mathbf{x}, \mathbf{y}) = 0 \iff \mathbf{x} = \mathbf{y}$;
+        \item $\dist(\mathbf{x}, \mathbf{y}) = \dist(\mathbf{x}, \mathbf{y})$;
+        \item $\dist(\mathbf{x}, \mathbf{y}) \le \dist(\mathbf{x}, \mathbf{z}) + \dist(\mathbf{z}, \mathbf{y})$.
+    \end{itemize}
+\end{prop}
+
+\begin{defn}[Parameters of a code]
+    If $C$ is a linear code over $A$, we define \emph{dimension of $C$} as $k = \dim_A(C)$ and \emph{minimum distance of $C$} as $d = \min\left\{\dist(\mathbf{x}, \mathbf{y}) \mid \mathbf{x}, \mathbf{y} \in C\right\}$. (\emph{If $C$ is a nonlinear code with length $n$, we can coherently define $k = \log_n{\left|C\right|}$.}) The length $n$, dimension $k$ and minimum distance $d$ are the \emph{parameters} of $C$.
+\end{defn}
+
+Suppose Alice wants to send a message to Bob through a channel --- for example, radio waves. They previously agree on a choice of code $C \subset A^n$, with parameters $n, k, d$. Alice will choose one of the $|A|^k$ code words and send it to Bob. Since the channel is not a perfect medium, some positions of the code may change; however, if less than $\frac{d}{2}$ of such changes occur, Bob can take the closest code word to the receiving message using Hamming distance and restore the original message.
+
+Thus, a good code has two properties: it has large $d$ with respect to $n$, in order to correct as many errors as possible; but also has large $k$ with respect to $n$, so that Alice has a wider variety of possible messages to send and send more information.
+
+\begin{defn}
+    If $C$ is a code, its code rate is $R = k/n$ and its relative minimum distance is $\delta = d/n$. Note that $R, \delta \in [0, 1]$.
+\end{defn}
+
+Therefore, a good code is one with large $R$ --- not much redundancy --- and large $\delta$ --- corrects many errors. 
+
+\section{Singleton bound and a promising example} \label{s:singleton}
+\begin{thm}[Singleton Bound]
+If $C$ is a code with parameters $n, k, d$, then \[k + d \le n + 1,\] or equivalently, \[R + \delta \le 1 + 1/n.\]
+\end{thm}
+\begin{proof}
+
+\end{proof}
+
+\begin{defn}[Reed--Solomon Codes]
+
+\end{defn}
+\begin{prop}
+Any Reed--Solomon code meets the Singleton Bound.
+\end{prop}
+\begin{proof}
+
+\end{proof}
+%Explain that Reed--Solomon codes have a limited length compared to the alphabet size.
+
+\section{Generalized Reed-Solomon codes} \label{s:grs}
+We shall redefine the Reed--Solomon codes using language related to a projective line. There is a way to replace the ``projective line'' with a ``projective plane curve'' and create other codes, called \emph{Generalized Reed-Solomon codes} or simply \emph{algebraic geometric codes}. We want large $R$ and $\delta$, and these codes yield \begin{equation}\label{eq:g/n} R + \delta \ge 1 + 1/n - g/n,\end{equation} where $n$ is the number of rational points of a curve $X$, with genus $g$.
+
+\section{Final thoughts} \label{s:tvz} On equation \eqref{eq:g/n}, we observe that good algebraic geometric codes are generated by curves with a large ratio between $n$ and $g$. On \cite{TVZ82}, the authors present a sequence of such curves, with $n/g$ large enough to create a better bound than the Gilbert--Varshamov one.
+
+
+\end{document}
