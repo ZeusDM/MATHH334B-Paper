@@ -2,22 +2,31 @@
 %\usepackage{amsaddr}
 
 \usepackage[isbn=false,url=false,doi=false,style=alphabetic]{biblatex} 
-\addbibresource{../sample.bib}
+\addbibresource{sample.bib}
 
+\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{hyperref}
-
 \usepackage{enumitem}
 \setlist{itemsep=.5em, parsep = .5em} % < Usually a good idea
-
-\usepackage{amsthm}
-\usepackage{amsmath}
 
 \newtheorem{thm}[]{Theorem}
 \newtheorem{prop}[thm]{Proposition}
 \theoremstyle{definition}
 \newtheorem{defn}[]{Definition}
 
+\usepackage{tcolorbox}
+\tcbuselibrary{most}
+
+\tcolorboxenvironment{thm}{ enhanced jigsaw, colframe=Aquamarine, colback=Aquamarine!8!white, breakable, before skip=5pt plus 10pt minus 3pt, after skip=5pt plus 10pt minus 3pt, grow to left by=8pt, left*=0pt, grow to right by=5pt, right*=0pt, top=0pt, bottom=0pt, sharp corners, rightrule=0pt, toprule=0pt, bottomrule=0pt, leftrule=3pt, parbox=false}
+
+\tcolorboxenvironment{prop}{ enhanced jigsaw, colframe=cyan, colback=cyan!8!white, breakable, before skip=5pt plus 10pt minus 3pt, after skip=5pt plus 10pt minus 3pt, grow to left by=8pt, left*=0pt, grow to right by=5pt, right*=0pt, top=0pt, bottom=0pt, sharp corners, rightrule=0pt, toprule=0pt, bottomrule=0pt, leftrule=3pt, parbox=false}
+
+\tcolorboxenvironment{defn}{ enhanced jigsaw, colframe=OliveGreen, colback=OliveGreen!8!white, breakable, before skip=5pt plus 10pt minus 3pt, after skip=5pt plus 10pt minus 3pt, grow to left by=8pt, left*=0pt, grow to right by=5pt, right*=0pt, top=0pt, bottom=0pt, sharp corners, rightrule=0pt, toprule=0pt, bottomrule=0pt, leftrule=3pt, parbox=false}
+
+\tcolorboxenvironment{proof}{ enhanced jigsaw, colframe=gray, colback=gray!8!white, breakable, before skip=5pt plus 10pt minus 3pt, after skip=5pt plus 10pt minus 3pt, grow to left by=8pt, left*=0pt, grow to right by=5pt, right*=0pt, top=0pt, bottom=0pt, sharp corners, rightrule=0pt, toprule=0pt, bottomrule=0pt, leftrule=3pt, parbox=false}
+
 \DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Ima}{Im}
 
 \title{Bounds on Coding Theory from Algebraic Geometry}
 \author{Guilherme Zeus Dantas e Moura}
@@ -28,13 +37,13 @@
 
 \begin{document}
 
+\maketitle
 \begin{abstract}    
     Coding theory is concerned with finding efficient ways to encode a message so that one may correct errors in the message. In algebraic coding theory, we study efficient codes generated from algebraic geometric methods.
     
-    In my paper, I plan on constructing the Reed-Solomon codes, generalizing them using projective curves, and understand the results from \cite{TVZ82} on finding a bound better than the well-known Gilbert--Varshamov bound.
+    In this paper, I will construct the Reed--Solomon codes, generalize them using projective curves, and understand the results from \cite{TVZ82} on finding a bound better than the well-known Gilbert--Varshamov one.
 \end{abstract} 
 
-\maketitle
 
 \section{Coding theory} \label{s:codingtheory}
 
@@ -65,7 +74,7 @@ In this paper, $A$ is a finite field unless otherwise stated.
     If $C$ is a linear code over $A$, we define \emph{dimension of $C$} as $k = \dim_A(C)$ and \emph{minimum distance of $C$} as $d = \min\left\{\dist(\mathbf{x}, \mathbf{y}) \mid \mathbf{x}, \mathbf{y} \in C\right\}$. (\emph{If $C$ is a nonlinear code with length $n$, we can coherently define $k = \log_n{\left|C\right|}$.}) The length $n$, dimension $k$ and minimum distance $d$ are the \emph{parameters} of $C$.
 \end{defn}
 
-Suppose Alice wants to send a message to Bob through a channel --- for example, radio waves. They previously agree on a choice of code $C \subset A^n$, with parameters $n, k, d$. Alice will choose one of the $|A|^k$ code words and send it to Bob. Since the channel is not a perfect medium, some positions of the code may change; however, if less than $\frac{d}{2}$ of such changes occur, Bob can take the closest code word to the receiving message using Hamming distance and restore the original message.
+Suppose Alice wants to send a message to Bob through a noisy channel. They previously agree on a choice of code $C \subset A^n$, with parameters $n, k, d$. Alice will choose one of the $|A|^k$ code words and send it to Bob. Since the channel is not a perfect medium, some positions of the code may change; however, if less than $\frac{d}{2}$ of such changes occur, Bob can take the closest code word to the receiving message using Hamming distance and restore the original message.
 
 Thus, a good code has two properties: it has large $d$ with respect to $n$, in order to correct as many errors as possible; but also has large $k$ with respect to $n$, so that Alice has a wider variety of possible messages to send and send more information.
 
@@ -80,27 +89,41 @@ Therefore, a good code is one with large $R$ --- not much redundancy --- and lar
 If $C$ is a code with parameters $n, k, d$, then \[k + d \le n + 1,\] or equivalently, \[R + \delta \le 1 + 1/n.\]
 \end{thm}
 
-\begin{prop}
-Theorem \ref{thm:singleton_bound} holds for any linear code $C$.
-\end{prop}
-
 \begin{proof}
-
+	We will provide the proof for Theorem \ref{thm:singleton_bound} when $C$ is a linear code.
 \end{proof}
 
 \begin{defn}[Reed--Solomon Codes]
-
+	Let $q$ be a power of a prime, and $\mathbb{F}_q = \{\alpha_1, \alpha_2, \dots, \alpha_q\}$ the field with $q$ elements. Let $k$ be an integer, and $\mathcal{L}_k$ the set of all polylomials over $\mathbb{F}_q$ with degree smaller than $k$. Let $k \le n \le q$ be an integer. The Reed--Solomon code $RS_q(n, k)$ over $\mathbb{F}_q$ is \[
+		RS_q(n, k) = \left\{\left(f(\alpha_1), f(\alpha_2), \dots, f(\alpha_n)\right) \mid f \in \mathcal{L}_k\right\}.
+	\]
 \end{defn}
+
 \begin{prop}
-Any Reed--Solomon code meets the Singleton Bound.
+	The Reed--Solomon code $R_q(n, k)$ is a linear code with length $n$, dimension $k$ and minimum distance $n - k + 1$.
+	Thus, any Reed--Solomon code meets the inequality of the Singleton Bound.
 \end{prop}
+
 \begin{proof}
+	$R_q(n, k)$ is a subset of $\mathbb{F}_q^n$, thus it has length $n$.  
+	Note that $\mathcal L_k$ is a vector space over $\mathbb{F}_q$. Note that $\{1, x, x^2, \dots, x^{k-1}\}$ is a choice of basis for this vector space, thus it has dimension $k$. Consider the map $\phi: \mathcal L_k \to \mathbb{F}_q^n$ given by \[
+		f \mapsto (f(\alpha_1), f(\alpha_2), \dots, f(\alpha_n)).
+	\]
+
+	Note that the map $\phi$ is a linear transformation. Thus, its image $\Ima \phi = RS_q(n, k)$ is also a vector space.  
+	Additionally, if $\phi(f) = \phi(g)$, then $f - g$ has at least $n$ roots, but has degree less than $n$; thus $f - g$ is the zero polylomial, which implies $f = g$. Therefore, $\phi$ is also injective. This implies that the dimension of the domain $\mathcal L_k$ is the same as the dimension of the image $RS_q(n, k)$, i.e.,  $\dim RS_q(n, k) = k$.
+	
+	Finally, consider distinct $f, g \in \mathcal L_k$ and define $d = \dist(\phi(f), \phi(g))$, $f - g$ has at least $n - d$. Futhermore, $f - g$ is a non-zero polynomial with degree less than $k$, thus has at most $k - 1$ roots. Then,  $ k - 1 \ge \#\ \text{roots} \ge n - d$.
+	Thus, when $d$ is the minimal distance, we get $k + d_{\mathrm{min}} \ge n + 1$, which along the \nameref{thm:singleton_bound} implies \[
+		k + d_\text{min} = n + 1.
+	\]
 
 \end{proof}
-%Explain that Reed--Solomon codes have a limited length compared to the alphabet size.
 
-\section{Generalized Reed-Solomon codes} \label{s:grs}
-We shall redefine the Reed--Solomon codes using language related to a projective line. There is a way to replace the ``projective line'' with a ``projective plane curve'' and create other codes, called \emph{Generalized Reed-Solomon codes} or simply \emph{algebraic geometric codes}. We want large $R$ and $\delta$, and these codes yield \begin{equation}\label{eq:g/n} R + \delta \ge 1 + 1/n - g/n,\end{equation} where $n$ is the number of rational points of a curve $X$, with genus $g$.
+The Reed--Solomon codes are good codes in the sense that key have the largest possible sum $k + d$ for their length $n$. However, Reed--Solomon codes are limited becuase their length is at most the the alphabet size.
+
+\section{Generalized Reed--Solomon codes} \label{s:grs}
+We shall redefine the Reed--Solomon codes using language related to a projective line. There is a way to replace the ``projective line'' with a ``projective plane curve'' and create other codes, called \emph{Generalized Reed--Solomon codes} or simply \emph{algebraic geometric codes}. We want large $R$ and $\delta$, and these codes yield \begin{equation}\label{eq:g/n} R + \delta \ge 1 + 1/n - g/n,\end{equation} where $n$ is the number of rational points of a curve $X$, with genus $g$.
 
 \section{Final thoughts} \label{s:tvz} On equation \eqref{eq:g/n}, we observe that good algebraic geometric codes are generated by curves with a large ratio between $n$ and $g$. On \cite{TVZ82}, the authors present a sequence of such curves, with $n/g$ large enough to create a better bound than the Gilbert--Varshamov one.
 
