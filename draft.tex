@@ -19,6 +19,7 @@
 
 \theoremstyle{remark}
 \newtheorem{rem}[thm]{Remark}
+\newtheorem*{exmp*}{Example}
 
 \numberwithin{equation}{section}
 
@@ -48,9 +49,9 @@
 
 \usepackage{makecell}
 
-\title[Draft: Codes from Algebraic Geometry]{Draft: Bounds on Coding Theory\\from Algebraic Geometry}
+\title[Codes from Algebraic Geometry]{Bounds on Coding Theory\\from Algebraic Geometry}
 \author{Guilherme Zeus Dantas e Moura}
-\date{2021-04-09} % <---- Change this date to the format YYYY-MM-DD
+\date{2021-05-07} % <---- Change this date to the format YYYY-MM-DD
 
 \begin{document}
 
@@ -92,14 +93,14 @@ Back to the analogy with Alice and Bob, the code $C$ is the set of all the messa
     Hamming distance is a metric over $A^n$, i.e., the following holds for any $\mathbf{x}, \mathbf{y}, \mathbf{z} \in A^n$:
     \begin{itemize}[noitemsep]
         \item $\dist(\mathbf{x}, \mathbf{y}) = 0 \iff \mathbf{x} = \mathbf{y}$;
-        \item $\dist(\mathbf{x}, \mathbf{y}) = \dist(\mathbf{x}, \mathbf{y})$;
+        \item $\dist(\mathbf{x}, \mathbf{y}) = \dist(\mathbf{y}, \mathbf{z})$;
         \item $\dist(\mathbf{x}, \mathbf{y}) \le \dist(\mathbf{x}, \mathbf{z}) + \dist(\mathbf{z}, \mathbf{y})$.
     \end{itemize}
 \end{prop}
 
 \begin{defn}[Parameters of a code]
-    If $C$ is a linear code over $A$, we define \emph{dimension of $C$} as $k = \dimension_A(C)$ and \emph{minimum distance of $C$} as $d = \min\left\{\dist(\mathbf{x}, \mathbf{y}) \mid \mathbf{x}, \mathbf{y} \in C\right\}$.
-	(\emph{If $C$ is a nonlinear code over an alphabet with size $q$, we can coherently define $k = \log_q{\left|C\right|}$.})
+	If $C$ is a code over $A$, we define \emph{dimension of $C$} as $k = \log_{|A|}|C|$ and \emph{minimum distance of $C$} as $d = \min\left\{\dist(\mathbf{x}, \mathbf{y}) \mid \mathbf{x} \neq \mathbf{y} \in C\right\}$.
+	(\emph{If $C$ is a linear code, the definition above is equivalent to $k = \dimension_{A}(C)$.})
 	The length $n$, dimension $k$ and minimum distance $d$ are the \emph{parameters} of $C$.
 \end{defn}
 
@@ -121,7 +122,7 @@ Therefore, a good code is one with large $R$ --- not much redundancy --- and lar
 \section{Singleton bound and a promising example} \label{s:singleton}
 \begin{thm}[Singleton Bound]\label{thm:singleton_bound}
 If $C$ is a code with parameters $n, k, d$, then 
-	\begin{equation}
+	\begin{equation} % IF SPACE NEEDED, TRANSFORM THESE EQUATIONS INTO INLINE
 		k + d \le n + 1,
 	\end{equation} 
 	or equivalently, 
@@ -129,9 +130,13 @@ If $C$ is a code with parameters $n, k, d$, then
 		R + \delta \le 1 + 1/n.
 	\end{equation}
 \end{thm}
+	
+We will provide the proof for Theorem \ref{thm:singleton_bound} when $C$ is a linear code over a field $K$.
 
 \begin{proof}
-	We will provide the proof for Theorem \ref{thm:singleton_bound} when $C$ is a linear code.\todo{Write proof}
+	Let $W := \{\mathbf{x} = (x_1, \dots, x_n) \mid x_{d} = \dots = x_n = 0\}$, which is a vector subspace of $K^n$ with dimension $d - 1$. Since $C$ is a vector space, $\vec 0 \in C$. For any non-zero vector $\vec v \in C$, $\dist(\vec 0, \vec v) \ge d$, thus $\vec v$ has at least $d$ non-zero entries, and therefore $\vec v \notin W$. Thus, $W \cap C = \{\vec 0\}$.
+
+	Let $\vec w_1, \dots, \vec w_{d-1}$ and $\vec v_1, \dots, \vec v_k$ be a choice of basis for $W$ and $C$, respectively. Since $W \cap C = \{\vec 0\}$, the vectors $\vec w_1, \dots, \vec w_{d-1}, \vec v_1, \dots, \vec v_k$ are linearly independent. They all are vectors in $K^n$, therefore, $k + d - 1 \le n$.
 \end{proof}
 
 \begin{defn}[Reed--Solomon codes, \cite{LS87}]\label{defn:rs_codes}
@@ -173,7 +178,7 @@ If $C$ is a code with parameters $n, k, d$, then
 
 \end{proof}
 
-The Reed--Solomon codes are very good codes in the sense that key have the largest possible sum $k + d$ for their length $n$.
+The Reed--Solomon codes are very good codes in the sense that they have the largest possible sum $k + d$ for their length $n$.
 However, Reed--Solomon codes are limited because their length is at most the alphabet size.
 So, a question naturally arises: Given fixed $\mathbb{F}_q$, are there codes over $\mathbb{F}_q$ with arbitrarily large $n$ and $R + \delta = 1 + 1/n$?
 If not, how large can $R$ and $\delta$ be when $n$ gets larger?
@@ -191,40 +196,46 @@ The article \cite{TVZ82} uses Algebraic Geometry to show that there are codes th
 
 Through this section, let $K$ be a field and $L$ its algebraic closure.
 
-\begin{defn}[Algebraic curves]
+\begin{defn}[Algebraic plane curves]
 	An affine algebraic plane curve $\mathfrak C_f$ is the zero set of a polynomial $f \in K[x, y]$.
-	A projective algebraic plane curve $\mathfrak C_F$ is the zero set in a projective plane of a homogeneous polynomial $F \in K[X, Y, Z]$.
-	Generally, algebraic curves are algebraic varieties of dimension $1$.
+	A projective algebraic plane curve $\mathfrak C_F$ is the zero set in a projective plane of a homogeneous polynomial $F \in K[X, Y, Z]$.\footnote{In more general terms, algebraic curves (as opposed to algebraic plane curves) are algebraic varieties of dimension $1$. For this paper, we will not worry about this; our discussion will be based on algebraic plane curves, but the results also follow in higher dimensions.}
 \end{defn}
+
 
 Note that there exists a bijection, called \emph{homogenization}, between the polynomials in $K[x, y]$ and the homogeneous polynomials in $K[X, Y, Z]$ defined by $f(x, y) \mapsto Z^{\deg f}f(X/Z, Y/Z)$.
 Because of this, we'll denote by $\mathfrak C$ both $\mathfrak C_f$ and $\mathfrak C_F$, where the usage is clear by context.
 
 \begin{defn}[Rational points, \cite{Wal00}] %Not word-by-word
-	Let $\mathfrak C$ be a projective curve defined by $F(X, Y, Z) = 0$, where $F \in K[X, Y, Z]$ is homogeneous polynomial.
+	Let $\mathfrak C$ be a projective curve defined by $F(X, Y, Z) = 0$, where $F \in K[X, Y, Z]$ is a homogeneous polynomial.
 	A point $(X_0 : Y_0 : Z_0) \in \mathbb{P}^2(L)$ is called a \emph{$L$-rational point} on $\mathfrak C$ if $F(X_0, Y_0, Z_0) = 0$.
 	Additionally, if $(X_0 : Y_0 : Z_0)$ is also in $\mathbb{P}^2(K)$, we call it simply a \emph{rational point} on $\mathfrak C$.
 \end{defn}
 
+\begin{exmp*}
+	Consider the curve $\mathfrak C$ defined by $X^2 + Y^2 + Z^2 = 0$ over $\mathbb{F}_7$.
+	The point $(1 : 2 : 3)$ is a rational point on $\mathfrak C$.
+	Note that the polynomial $x^2 - 3$ is irreducible over $\mathbb{F}_7$, but there it has a root $\alpha$ in its algebraic closure, $\overline{\mathbb{F}_7}$. The projective point $(1 :  \alpha : \alpha)$ is a $\overline{\mathbb{F}_7}$-rational point.
+\end{exmp*}
+
 
 \begin{thm}[Bezout's theorem, \cite{Wal00}] %Not word-by-word
-	If $F, G \in K[X, Y, Z]$ are homogeneous polynomials of degrees $d$ and $e$, respectively, then their curves $\mathfrak C_F$ and $\mathfrak C_G$ intersect in exactly $de$ $L$-rational points, counting multiplicity.
+	If $F, G \in K[X, Y, Z]$ are homogeneous polynomials of degrees $d$ and $e$, respectively, then their curves $\mathfrak C_F$ and $\mathfrak C_G$ intersect in exactly $d\cdot e$ $L$-rational points, counting multiplicity.
 \end{thm}
 
 \begin{defn}[Rational function]
-	A rational function $f$ over a $K$ is the ratio $g/h$ of polynomials $g, h \in K[x, y]$.
+	A rational function $f$ over $K$ is the ratio $g/h$ of polynomials $g, h \in K[x, y]$.
 	A homogeneous rational function $F$ over a $K$ is the ratio $G/H$ of homogeneous polynomials $G, H \in K[x, y]$.
 
-	After cancelling common roots of $g, h$, the roots of $g$ are called \emph{zeros} of $f$ and the roots of $h$ are called the \emph{poles} of $f$.
-	
-	We say $f$ has order $n$ in $P$ if $P$ is a zero of multiplicity $n$; order $-n$ if $P$ is a pole with multiplicity $n$; and order $0$, otherwise.
+	After cancelling common roots of $g, h$, the roots of $g$ are called \emph{zeros} of $f$ and the roots of $h$ are called the \emph{poles} of $f$.  
+	We say $f$ has order $n$ at $P$ if $P$ is a zero of multiplicity $n$; order $-n$ if $P$ is a pole with multiplicity $n$; and order $0$, otherwise.
 \end{defn}
 
 \begin{defn}[Divisor] 
-	Let $\overline{\mathbb{F}_q}$ be the algebraic closure of $\mathbb{F}_q$.
-	Let $\mathfrak C$ be a projective plane curve defined over $\mathbb{F}_q$.
-	A \emph{divisor} $D$ on $\mathfrak C$ is a formal finite sum of the form $D = \sum a_P P$, where $P$ are points of $\mathfrak C$, $a_P$ are integers and $a_P = 0$ for all but finitely many points $P$.
-	The \emph{degree} of $D$ is $\sum n_P$.
+%	Let $\overline{\mathbb{F}_q}$ be the algebraic closure of $\mathbb{F}_q$.
+%	Let $\mathfrak C$ be a projective plane curve defined over $\mathbb{F}_q$.
+	Let $\mathfrak C$ be a projective plane curve defined over $K$.
+	A \emph{divisor} $D$ on $\mathfrak C$ is a formal finite sum of the form $D = \sum a_P P$, where $P$ varies over the $L$-rational points on $\mathfrak C$, $a_P$ is an integer and $a_P = 0$ for all but finitely many points $P$.
+	The \emph{degree} of $D$ is $\sum a_P$.
 	The \emph{support} $\Supp D$ is the set $\{P \in X : a_P \neq 0\}$.
 \end{defn}
 
@@ -291,7 +302,8 @@ We shall generalize the idea by changing the projective line to an arbitrary pro
 
 \begin{defn}[Algebraic geometric codes, \cite{LS87, Wal00}] %Copied from Wal00
 	Let $\mathfrak C$ be an irreducible nonsingular%
-	\todo{Provide an explanation for why the `irreducible nonsingular' is there, but not a thing that the reader should worry. I think the key is some sort of multiplicity.}
+	\footnote{The adjectives make sure $\mathfrak C$ is well-behaved. The reader should not worry about them.}
+%%	\todo{Provide an explanation for why the `irreducible nonsingular' is there, but not a thing that the reader should worry. I think the key is some sort of multiplicity.}
 	projective plane curve, let $D$ be a divisor on $\mathfrak C$ and let $\mathcal P = \{P_1, P_2, \dots, P_n\}$ be a set of rational points on $\mathfrak C$.
 	Assume $\mathcal P$ and $\Supp D$ have no points in common, thus, no $P_i$ can be a pole of any $f \in \mathcal L(D)$, and $f(P_i)$ is well-defined for any $f \in \mathcal L(D)$ and any $P_i \in \mathcal P$.
 	Then, the \emph{algebraic geometric code} associated to $\mathfrak C, \mathcal P$ and $D$ is
