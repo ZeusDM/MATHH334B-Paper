@@ -93,10 +93,12 @@ Back to the analogy with Alice and Bob, the code $C$ is the set of all the messa
     Hamming distance is a metric over $A^n$, i.e., the following holds for any $\mathbf{x}, \mathbf{y}, \mathbf{z} \in A^n$:
     \begin{itemize}[noitemsep]
         \item $\dist(\mathbf{x}, \mathbf{y}) = 0 \iff \mathbf{x} = \mathbf{y}$;
-        \item $\dist(\mathbf{x}, \mathbf{y}) = \dist(\mathbf{y}, \mathbf{z})$;
+        \item $\dist(\mathbf{x}, \mathbf{y}) = \dist(\mathbf{y}, \mathbf{x})$;
         \item $\dist(\mathbf{x}, \mathbf{y}) \le \dist(\mathbf{x}, \mathbf{z}) + \dist(\mathbf{z}, \mathbf{y})$.
     \end{itemize}
 \end{prop}
+
+The proof of Proposition \ref{prop:hamming} is ommited from this short paper.
 
 \begin{defn}[Parameters of a code]
 	If $C$ is a code over $A$, we define \emph{dimension of $C$} as $k = \log_{|A|}|C|$ and \emph{minimum distance of $C$} as $d = \min\left\{\dist(\mathbf{x}, \mathbf{y}) \mid \mathbf{x} \neq \mathbf{y} \in C\right\}$.
@@ -171,11 +173,7 @@ We will provide the proof for Theorem \ref{thm:singleton_bound} when $C$ is a li
 	Finally, consider distinct $f, g \in  L_k$ and define $d = \dist(\phi(f), \phi(g))$, $f - g$ has at least $n - d$ roots.
 	Furthermore, $f - g$ is a non-zero polynomial with degree less than $k$, thus has at most $k - 1$ roots.
 	Then,  $ k - 1 \ge \#\ \text{roots} \ge n - d$.
-	If we choose $f, g$ such that $d$ is the minimal distance, we get $k + d_{\mathrm{min}} \ge n + 1$, which together with \nameref{thm:singleton_bound} implies 
-	\begin{equation}
-		k + d_\text{min} = n + 1.
-	\end{equation}
-
+	If we choose $f, g$ such that $d$ is the minimal distance, we get $k + d_{\mathrm{min}} \ge n + 1$, which together with \nameref{thm:singleton_bound} implies $k + d_\text{min} = n + 1$.
 \end{proof}
 
 The Reed--Solomon codes are very good codes in the sense that they have the largest possible sum $k + d$ for their length $n$.
@@ -202,24 +200,24 @@ Through this section, let $K$ be a field and $L$ its algebraic closure.
 \end{defn}
 
 
-Note that there exists a bijection, called \emph{homogenization}, between the polynomials in $K[x, y]$ and the homogeneous polynomials in $K[X, Y, Z]$ defined by $f(x, y) \mapsto Z^{\deg f}f(X/Z, Y/Z)$.
+Note that there exists a natural injection, called \emph{homogenization}, from the set of polynomials in $K[x, y]$ and the set of homogeneous polynomials in $K[X, Y, Z]$ defined by $f(x, y) \mapsto Z^{\deg f}f(X/Z, Y/Z)$.
 Because of this, we'll denote by $\mathfrak C$ both $\mathfrak C_f$ and $\mathfrak C_F$, where the usage is clear by context.
 
 \begin{defn}[Rational points, \cite{Wal00}] %Not word-by-word
 	Let $\mathfrak C$ be a projective curve defined by $F(X, Y, Z) = 0$, where $F \in K[X, Y, Z]$ is a homogeneous polynomial.
 	A point $(X_0 : Y_0 : Z_0) \in \mathbb{P}^2(L)$ is called a \emph{$L$-rational point} on $\mathfrak C$ if $F(X_0, Y_0, Z_0) = 0$.
-	Additionally, if $(X_0 : Y_0 : Z_0)$ is also in $\mathbb{P}^2(K)$, we call it simply a \emph{rational point} on $\mathfrak C$.
+	Additionally, if $(X_0 : Y_0 : Z_0)$ is also in $\mathbb{P}^2(K)$, we call it a \emph{$K$-rational point} on $\mathfrak C$, or simply a \emph{rational point} on $\mathfrak C$.
 \end{defn}
 
 \begin{exmp*}
 	Consider the curve $\mathfrak C$ defined by $X^2 + Y^2 + Z^2 = 0$ over $\mathbb{F}_7$.
-	The point $(1 : 2 : 3)$ is a rational point on $\mathfrak C$.
-	Note that the polynomial $x^2 - 3$ is irreducible over $\mathbb{F}_7$, but there it has a root $\alpha$ in its algebraic closure, $\overline{\mathbb{F}_7}$. The projective point $(1 :  \alpha : \alpha)$ is a $\overline{\mathbb{F}_7}$-rational point.
+	The point $(1 : 2 : 3)$ is a $\mathbb{F}_7$-rational point on $\mathfrak C$.
+	Note that the polynomial $x^2 - 3$ is irreducible over $\mathbb{F}_7$, but there it has a root $\alpha$ in its algebraic closure, $\overline{\mathbb{F}_7}$. The projective point $(1 :  \alpha : \alpha)$ is a $\overline{\mathbb{F}_7}$-rational point on $\mathfrak C$.
 \end{exmp*}
 
 
 \begin{thm}[Bezout's theorem, \cite{Wal00}] %Not word-by-word
-	If $F, G \in K[X, Y, Z]$ are homogeneous polynomials of degrees $d$ and $e$, respectively, then their curves $\mathfrak C_F$ and $\mathfrak C_G$ intersect in exactly $d\cdot e$ $L$-rational points, counting multiplicity.
+	If $F, G \in K[X, Y, Z]$ are homogeneous polynomials and there is no homogeneous polynomial in $K[X, Y, Z]$ that divides both $F$ and $G$, then their curves $\mathfrak C_F$ and $\mathfrak C_G$ intersect in exactly $\deg(F) \cdot \deg(G)$ $L$-rational points, counting multiplicity.
 \end{thm}
 
 \begin{defn}[Rational function]
@@ -236,23 +234,31 @@ Because of this, we'll denote by $\mathfrak C$ both $\mathfrak C_f$ and $\mathfr
 	Let $\mathfrak C$ be a projective plane curve defined over $K$.
 	A \emph{divisor} $D$ on $\mathfrak C$ is a formal finite sum of the form $D = \sum a_P P$, where $P$ varies over the $L$-rational points on $\mathfrak C$, $a_P$ is an integer and $a_P = 0$ for all but finitely many points $P$.
 	The \emph{degree} of $D$ is $\sum a_P$.
-	The \emph{support} $\Supp D$ is the set $\{P \in X : a_P \neq 0\}$.
+	The \emph{support} of $D$, denoted by $\Supp D$, is the set of $L$-rational points $P$ on $\mathfrak C$ that satisfy $a_P \neq 0$.
 \end{defn}
 
-\begin{defn}[Field of rational functions on a curve, \cite{Wal00}] %Copied
-	Let $F$ be the polynomial which defines the nonsingular projective plane curve $C$ over the field $\mathbb{F}_q$. The \emph{field of rational functions on $C$} is
-	\begin{equation}
-		\mathbb{F}_q(C) := \left(\left\{\frac{G}{H}\, \bigg|\,\, \makecell{G, H \in \mathbb{F}_q[X, Y, Z]\\\text{are homogeneous}\\\text{of the same degree}} \right\} \cup \{0\}\right) / \sim
-	\end{equation}
-	where $g/h \sim g'/h'$ if, and only if, $gh' - g'h \in \langle F \rangle \subset \mathbb{F}_q[X, Y, Z]$.
-	\todo{Redefine it in a way that actually shows it is pretty simple.}
+%\begin{defn}[Field of rational functions on a curve, \cite{Wal00}] %Copied
+%	Let $F$ be the polynomial which defines the nonsingular projective plane curve $\mathfrak C$ over the field $\mathbb{F}_q$. The \emph{field of rational functions on $C$} is
+%	\begin{equation}
+%		\mathbb{F}_q(\mathfrak C) := \left(\left\{\frac{G}{H}\, \bigg|\,\, \makecell{G, H \in \mathbb{F}_q[X, Y, Z]\\\text{are homogeneous}\\\text{of the same degree}} \right\} \cup \{0\}\right) / \sim
+%	\end{equation}
+%	where $g/h \sim g'/h'$ if, and only if, $gh' - g'h \in \langle F \rangle \subset \mathbb{F}_q[X, Y, Z]$.
+%	\todo{Redefine it in a way that actually shows it is pretty simple.}
+%\end{defn}
+
+\begin{defn}[Riemann--Roch space, \cite{LS87}]
+	If $D = \sum n_p P$, then define the \emph{Riemann--Roch space $\mathcal L(D)$} as the vector space formed by all homogeneous rational functions $f$ such that the order of $f$ at each point $P$ of $\mathfrak C$ is greater or equal to $-n_P$ (plus the zero polynomial).
 \end{defn}
 
-\begin{defn}[\cite{LS87}]
-	If $D = \sum n_p P$, then define the vector space $\mathcal L(D)$ as the set of all homogeneous rational functions $f$ such that the order of $f$ at each point $P$ of $\mathfrak C$ is greater or equal to $-n_P$.
-\end{defn}
+\begin{prop}\label{prop:degDlt0}
+	If $\deg D < 0$, then $\mathcal L(D)$ only contains the zero polynomial.
+\end{prop}
 
-For our study, an important theorem is the following:
+\begin{proof}
+	\todo{Prove this Proposition.}
+\end{proof}
+
+For our study, an important theorem from Algebraic Geometry that will be useful in Section \ref{s:grs} when creating new types of codes is the following one:
 \begin{thm}[Riemman--Roch Theorem, \cite{Wal00}]
 	Let $\mathfrak C$ be a nonsingular projective curve of genus%
 	\footnote{For the reader that is not familiar with genus, it is enough to know that it is an integer that can be calculated for any given curve.}
@@ -275,8 +281,8 @@ For our study, an important theorem is the following:
 %where $g$ denotes the genus of $\mathfrak C$ (for the reader who is not familiar with the term genus, it suffices to know that it is an integer which can be calculated for any given curve).
 
 \section{Generalized Reed--Solomon codes} \label{s:grs}
-Let $\mathbb{P}^1(\mathbb{F}_q)$ denote the projective line over $\mathbb{F}_q$.
-We will write $(a : b)$ to denote the projective point corresponding to the $1$-dimensional vector space through $(a, b)$.
+Let $\mathbb{P}^1(\mathbb{F}_q)$ denote the projective line over $\mathbb{F}_q = \{\alpha_1, \dots, \alpha_q\}$.
+We will write $(a : b)$ to denote the projective point corresponding to the $1$-dimensional vector space containing $(a, b)$.
 The points on $\mathbb{P}^1(\mathbb{F}_q)$ are the points
 \begin{equation}
 	P_i = (\alpha_i : 1), \quad 1 \le i \le q, \qquad \text{and} \qquad 
@@ -294,15 +300,15 @@ Consider the divisor $D = (k-1)P_\infty$ and the associated vector space $\mathc
 
 Then, we can rewrite the Reed--Solomon code from Definition \ref{defn:rs_codes} as
 \begin{equation}
-	RS_q(n, k) = \{f(P_1), f(P_2), \dots, f(P_n) \mid f \in \mathcal L(D)\}.
+	RS_q(n, k) = \left\{\big(f(P_1), f(P_2), \dots, f(P_n)\big) \mid f \in \mathcal L(D)\right\}.
 \end{equation}
 
 Here, we are evaluating the function $f$ in the points of the projective line.
-We shall generalize the idea by changing the projective line to an arbitrary projective curve, and allowing other divisors $D$.
+We shall generalize the idea by changing the projective line to an arbitrary projective curve, and allowing other divisors.
 
 \begin{defn}[Algebraic geometric codes, \cite{LS87, Wal00}] %Copied from Wal00
 	Let $\mathfrak C$ be an irreducible nonsingular%
-	\footnote{The adjectives make sure $\mathfrak C$ is well-behaved. The reader should not worry about them.}
+	\footnote{These adjectives just make sure $\mathfrak C$ does not have some weird behavior, e.g., $\mathfrak C$ has no double root. The reader should not worry much about them.}
 %%	\todo{Provide an explanation for why the `irreducible nonsingular' is there, but not a thing that the reader should worry. I think the key is some sort of multiplicity.}
 	projective plane curve, let $D$ be a divisor on $\mathfrak C$ and let $\mathcal P = \{P_1, P_2, \dots, P_n\}$ be a set of rational points on $\mathfrak C$.
 	Assume $\mathcal P$ and $\Supp D$ have no points in common, thus, no $P_i$ can be a pole of any $f \in \mathcal L(D)$, and $f(P_i)$ is well-defined for any $f \in \mathcal L(D)$ and any $P_i \in \mathcal P$.
@@ -322,20 +328,39 @@ We shall generalize the idea by changing the projective line to an arbitrary pro
 \end{thm}
 
 \begin{proof}
-	\todo{Write proof.}
+	Since $C(\mathfrak C, \mathcal P, D)$ is a subset of $\mathbb{F}_q^n$, it is a code of length $n$.
+
+	Let $\psi: \mathcal L(D) \to \mathbb{F}_q^n$ be defined by $f \mapsto (f(P_1), \dots, f(P_n))$. This is a linear transformation, and $\mathcal L(D)$ is a vector space, thus the image of this function, which is precisely $C(\mathfrak C, \mathcal P, D)$, is also a vector space; thus it is a linear code.
+
+	Futhermore, we shall prove that $\psi$ is injective.
+	If $\psi(f) = \psi(g)$, then $\psi(f - g) = \vec 0$.
+	Let $h := f-g$.
+	We have $h(P_1) = h(P_2) = \dots = h(P_n) = 0$, so every $P_i$ is a zero of $h$, and finally $a_{P_i} \ge 1$, for all $1 \le i \le n$.
+	Therefore, $h \in \mathcal L(D - P_1 - \cdots - P_n)$.
+	Since $\deg D < n$, we have $\deg(D - P_1 - \cdots - P_n) < 0$ and, consequenly, $h$ must be the zero polynomial by Proposition \ref{prop:degDlt0}.
+	Therefore, $f = g$, finishing the proof that $\psi$ is injective.
+	Since $\psi$ is a injective linear transformation, the dimension of the domain and of the image are the same.
+	Therefore, the dimension of $C(\mathfrak C, \mathcal P, D)$ is $k = \dim \mathcal L(D)$, which evaluates to $\deg D + 1 - g$ by the Riemman-Roch Theorem.
+
+	Finally, let $f \neq g$ be polynomials such that $\psi(f)$ and $\psi(g)$ yield the minimum distance $d$.
+	Then, $\psi(f) - \psi(g) = \psi(f-g)$ and $\psi(g) - \psi(g) = \vec 0$ also yield the same distance $d$.
+	Therefore, if we define $h = f - g$, exactly  $d$ coordinates of $\psi(h)$ are nonzero.
+	Without loss of generality, say that $h(P_{d+1}) = \cdots = h(P_n) = 0$.
+	Similarly as in the previous paragraph, this implies $h \in \mathcal L(D - P_{d+1} - \cdots - P_n)$.
+	Since $h$ is not the zero polynomial, Proposition \ref{prop:degDlt0} implies $\deg(D - P_{d+1} - \cdots - P_n) = \deg D - (n-d) \ge 0$, i.e., $d \ge n - \deg D$.
 \end{proof}
 
-We want large $R$ and $\delta$, and these codes yield 
+This theorem is an interesting result! We want large $R$ and $\delta$, and these codes yield $k + d \ge n + 1 - g$, i.e., 
 	\begin{equation}
 		\label{eq:g/n} R + \delta \ge 1 + 1/n - g/n,
 	\end{equation}
-where $n$ is the number of rational points of a curve $\mathfrak C$, with genus $g$; this is an interesting result!
-All the work done can be applied for algebraic curves in higher dimensional projective spaces.
+where $n$ is the number of rational points of a curve $\mathfrak C$, with genus $g$.
+Futhermore, all the work done can be applied for algebraic curves in higher dimensional projective spaces.
 
 \section{Final thoughts}\label{s:tvz}
 
 On equation \eqref{eq:g/n}, we observe that good algebraic geometric codes are generated by curves with a small ratio between $g$ and $n$.
-On \cite{TVZ82},\todo{Talk a bit more about it.} the authors present a sequence of such curves, with $g/n$ large enough to create a better bound than the Gilbert--Varshamov one.
+On \cite{TVZ82},\todo{Write one or two more sentences about this article.} the authors present a sequence of such curves, with $g/n$ large enough to create a better bound than the Gilbert--Varshamov one.
 
 \printbibliography
 
