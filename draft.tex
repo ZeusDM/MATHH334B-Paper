@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 \usepackage{amsmath, amssymb, amsfonts, amsthm, graphicx}
 \usepackage[mathscr]{eucal}
+\usepackage[symbol, perpage]{footmisc}
 
 \usepackage[colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage[backend=biber,isbn=false,url=false]{biblatex} 
@@ -121,7 +122,7 @@ but also has large $k$ with respect to $n$, so that Alice has a wider variety of
 
 Therefore, a good code is one with large $R$ --- not much redundancy --- and large $\delta$ --- corrects many errors. 
 
-\section{Singleton bound and a promising example} \label{s:singleton}
+\section{The singleton bound and a promising example} \label{s:singleton}
 \begin{thm}[Singleton Bound]\label{thm:singleton_bound}
 If $C$ is a code with parameters $n, k, d$, then 
 	\begin{equation} % IF SPACE NEEDED, TRANSFORM THESE EQUATIONS INTO INLINE
@@ -157,9 +158,9 @@ We will provide the proof for Theorem \ref{thm:singleton_bound} when $C$ is a li
 
 \begin{proof}
 	$RS_q(n, k)$ is a subset of $\mathbb{F}_q^n$, thus it has length $n$.  
-	Note that $ L_k$ is a vector space over $\mathbb{F}_q$.
+	Note that $ \mathcal L_k$ is a vector space over $\mathbb{F}_q$.
 	Note that $\{1, x, x^2, \dots, x^{k-1}\}$ is a choice of basis for this vector space, thus it has dimension $k$.
-	Consider the map $\phi:  L_k \to \mathbb{F}_q^n$ given by 
+	Consider the map $\phi:  \mathcal L_k \to \mathbb{F}_q^n$ given by 
 	\begin{equation}
 		f \mapsto (f(\alpha_1), f(\alpha_2), \dots, f(\alpha_n)).
 	\end{equation}
@@ -168,12 +169,12 @@ We will provide the proof for Theorem \ref{thm:singleton_bound} when $C$ is a li
 	Thus, its image $\Ima \phi = RS_q(n, k)$ is also a vector space.  
 	Additionally, if $\phi(f) = \phi(g)$, then $f - g$ has at least $n$ roots, but has degree less than $n$; thus $f - g$ is the zero polynomial, which implies $f = g$.
 	Therefore, $\phi$ is also injective.
-	This implies that the dimension of the domain $ L_k$ is the same as the dimension of the image $RS_q(n, k)$, i.e.,  $\dimension RS_q(n, k) = k$.
+	This implies that the dimension of the domain $ \mathcal L_k$ is the same as the dimension of the image $RS_q(n, k)$, i.e.,  $\dimension RS_q(n, k) = k$.
 	
-	Finally, consider distinct $f, g \in  L_k$ and define $d = \dist(\phi(f), \phi(g))$, $f - g$ has at least $n - d$ roots.
+	Finally, consider distinct $f, g \in  \mathcal L_k$ and define $d = \dist(\phi(f), \phi(g))$, $f - g$ has at least $n - d$ roots.
 	Furthermore, $f - g$ is a non-zero polynomial with degree less than $k$, thus has at most $k - 1$ roots.
 	Then,  $ k - 1 \ge \#\ \text{roots} \ge n - d$.
-	If we choose $f, g$ such that $d$ is the minimal distance, we get $k + d_{\mathrm{min}} \ge n + 1$, which together with \nameref{thm:singleton_bound} implies $k + d_\text{min} = n + 1$.
+	If we choose $f, g$ such that $d$ is the minimal distance, we get $k + d_{\mathrm{min}} \ge n + 1$, which together with the Singleton Bound, implies $k + d_\text{min} = n + 1$.
 \end{proof}
 
 The Reed--Solomon codes are very good codes in the sense that they have the largest possible sum $k + d$ for their length $n$.
@@ -190,7 +191,7 @@ in which
 \end{equation}
 The article \cite{TVZ82} uses Algebraic Geometry to show that there are codes that give better bounds.
 
-\section{Curves, Rational Functions and Divisors}
+\section{Curves, rational functions and divisors}
 
 Through this section, let $K$ be a field and $L$ its algebraic closure.
 
@@ -220,13 +221,27 @@ Because of this, we'll denote by $\mathfrak C$ both $\mathfrak C_f$ and $\mathfr
 	If $F, G \in K[X, Y, Z]$ are homogeneous polynomials and there is no homogeneous polynomial in $K[X, Y, Z]$ that divides both $F$ and $G$, then their curves $\mathfrak C_F$ and $\mathfrak C_G$ intersect in exactly $\deg(F) \cdot \deg(G)$ $L$-rational points, counting multiplicity.
 \end{thm}
 
-\begin{defn}[Rational function]
-	A rational function $f$ over $K$ is the ratio $g/h$ of polynomials $g, h \in K[x, y]$.
-	A homogeneous rational function $F$ over a $K$ is the ratio $G/H$ of homogeneous polynomials $G, H \in K[x, y]$.
+%\begin{defn}[Rational function]
+%	A rational function $f$ over $K$ is the ratio $g/h$ of polynomials $g, h \in K[x, y]$.
+%	A homogeneous rational function $F$ over a $K$ is the ratio $G/H$ of homogeneous polynomials $G, H \in K[x, y]$.
+%
+%	After cancelling common roots of $g, h$, the roots of $g$ are called \emph{zeros} of $f$ and the roots of $h$ are called the \emph{poles} of $f$.  
+%	We say $f$ has order $n$ at $P$ if $P$ is a zero of multiplicity $n$; order $-n$ if $P$ is a pole with multiplicity $n$; and order $0$, otherwise.
+%\end{defn}
 
-	After cancelling common roots of $g, h$, the roots of $g$ are called \emph{zeros} of $f$ and the roots of $h$ are called the \emph{poles} of $f$.  
-	We say $f$ has order $n$ at $P$ if $P$ is a zero of multiplicity $n$; order $-n$ if $P$ is a pole with multiplicity $n$; and order $0$, otherwise.
+\begin{defn}[Rational function on a curve]
+	Let $F \in K[X, Y, Z]$ be a homogeneous polynomial and let $\mathfrak C = \mathfrak C_F$.
+	If $G, H \in K[X, Y, Z]$ are homogeneous polynomials of equal degree, then the fraction $G/H$ is called a \emph{rational function} on $\mathfrak C$.
+	Fractions $G/H$ and $G'/H'$ define the same rational function if $G'H - GH'$ is a multiple of $F$, i.e., if  $G'H - GH'$ vanishes at all $L$-rational points on $\mathfrak C$.
 \end{defn}
+
+	Note that it makes sense to evaluate a rational function on a projective point, since \[
+		\frac{G(X_0, Y_0, Z_0)}{H(X_0, Y_0, Z_0)} = \frac{\lambda^d G(X_0, Y_0, Z_0)}{\lambda^d H(X_0, Y_0, Z_0)} = \frac{G(\lambda X_0, \lambda Y_0, \lambda Z_0)}{H(\lambda X_0, \lambda Y_0, \lambda Z_0)},
+	\]
+	i.e., the result is the same regardless of the representation of a given projective point.
+
+	After cancelling common factors of $G$ and $H$, a $L$-rational point $P$ on $\mathfrak C$ is called a \emph{zero} of $G/H$ whenever $G$ vanishes at $P$, and is called a \emph{poles} of $G/H$ whenever $H$ vanishes at $P$.  
+	We say $G/H$ has order $n$ at $P$ if $P$ is a zero of multiplicity $n$; order $-n$ if $P$ is a pole with multiplicity $n$; and order $0$, otherwise.
 
 \begin{defn}[Divisor] 
 %	Let $\overline{\mathbb{F}_q}$ be the algebraic closure of $\mathbb{F}_q$.
@@ -246,8 +261,8 @@ Because of this, we'll denote by $\mathfrak C$ both $\mathfrak C_f$ and $\mathfr
 %	\todo{Redefine it in a way that actually shows it is pretty simple.}
 %\end{defn}
 
-\begin{defn}[Riemann--Roch space, \cite{LS87}]
-	If $D = \sum n_p P$, then define the \emph{Riemann--Roch space $\mathcal L(D)$} as the vector space formed by all homogeneous rational functions $f$ such that the order of $f$ at each point $P$ of $\mathfrak C$ is greater or equal to $-n_P$ (plus the zero polynomial).
+\begin{defn}[\cite{LS87}]
+	If $D = \sum n_p P$, then define $\mathcal L(D)$ as the vector space formed by all homogeneous rational functions $f$ such that the order of $f$ at each $L$-rational point $P$ on $\mathfrak C$ is greater or equal to $-n_P$ (plus the zero polynomial).
 \end{defn}
 
 \begin{prop}\label{prop:degDlt0}
@@ -255,11 +270,13 @@ Because of this, we'll denote by $\mathfrak C$ both $\mathfrak C_f$ and $\mathfr
 \end{prop}
 
 \begin{proof}
-	\todo{Prove this Proposition.}
+	Bezout's theorem implies that $\mathfrak C$ and $\mathfrak C_G$ intersect in the same number of points, counting multiplicity, than $\mathfrak C$ and $\mathfrak C_H$. Therefore, the number of zeros of a function is the same as the number of poles, counting multiplicity. Thus, the sum of the orders of $G/H$ at the $L$-rational points on $\mathfrak C$ must be zero. On the other hand, if $G/H \in \mathcal L(D)$, then the sum of the orders of $G/H$ at the $L$-rational points on $\mathfrak C$ must be $\ge - \deg(D)$.
+
+	Thus, if $\deg(D) < 0$, then a rational function $G/H$ cannot be in $\mathcal L(D)$.
 \end{proof}
 
 For our study, an important theorem from Algebraic Geometry that will be useful in Section \ref{s:grs} when creating new types of codes is the following one:
-\begin{thm}[Riemman--Roch Theorem, \cite{Wal00}]
+\begin{thm}[Riemann--Roch Theorem, \cite{Wal00}]
 	Let $\mathfrak C$ be a nonsingular projective curve of genus%
 	\footnote{For the reader that is not familiar with genus, it is enough to know that it is an integer that can be calculated for any given curve.}
 	$g$ defined over the field $\mathbb{F}_q$ and let $D$ be a divisor on $\mathfrak C$.
@@ -291,12 +308,10 @@ The points on $\mathbb{P}^1(\mathbb{F}_q)$ are the points
 
 Consider the divisor $D = (k-1)P_\infty$ and the associated vector space $\mathcal L(D)$, which can be seen as the set of two-variable homogeneous rational functions which have a pole of order less than $k$ in the point $P_\infty$.
 
-\begin{prop}
-	The sets $L_k$ and $\mathcal L(D)$ are mapped with a bijection (homogenization) $\phi: f(x) \mapsto Y^{\deg f} f(X/Y)$.
-\end{prop}
-\begin{proof}
-	\todo{Write proof.}
-\end{proof}
+Note that, if a polynomial $f(x) \in \mathcal L_k$ has degree $d < k$, then the rational function \[
+	F(X, Y) = \frac{Y^d f(X/Y)}{Y^d}
+\]
+has $P_\infty$ as its only pole, with order at most $k-1$. Thus, $F(X, Y) \in \mathcal L(D)$ and $f(\alpha_i) = F(P_i)$ for any $\alpha_i$.
 
 Then, we can rewrite the Reed--Solomon code from Definition \ref{defn:rs_codes} as
 \begin{equation}
@@ -308,7 +323,9 @@ We shall generalize the idea by changing the projective line to an arbitrary pro
 
 \begin{defn}[Algebraic geometric codes, \cite{LS87, Wal00}] %Copied from Wal00
 	Let $\mathfrak C$ be an irreducible nonsingular%
-	\footnote{These adjectives just make sure $\mathfrak C$ does not have some weird behavior, e.g., $\mathfrak C$ has no double root. The reader should not worry much about them.}
+	\footnote{These adjectives just make sure $\mathfrak C$ does not have some weird behavior%
+	%, e.g., $\mathfrak C$ has no double root%
+	. The reader should not worry much about them.}
 %%	\todo{Provide an explanation for why the `irreducible nonsingular' is there, but not a thing that the reader should worry. I think the key is some sort of multiplicity.}
 	projective plane curve, let $D$ be a divisor on $\mathfrak C$ and let $\mathcal P = \{P_1, P_2, \dots, P_n\}$ be a set of rational points on $\mathfrak C$.
 	Assume $\mathcal P$ and $\Supp D$ have no points in common, thus, no $P_i$ can be a pole of any $f \in \mathcal L(D)$, and $f(P_i)$ is well-defined for any $f \in \mathcal L(D)$ and any $P_i \in \mathcal P$.
@@ -340,7 +357,7 @@ We shall generalize the idea by changing the projective line to an arbitrary pro
 	Since $\deg D < n$, we have $\deg(D - P_1 - \cdots - P_n) < 0$ and, consequenly, $h$ must be the zero polynomial by Proposition \ref{prop:degDlt0}.
 	Therefore, $f = g$, finishing the proof that $\psi$ is injective.
 	Since $\psi$ is a injective linear transformation, the dimension of the domain and of the image are the same.
-	Therefore, the dimension of $C(\mathfrak C, \mathcal P, D)$ is $k = \dim \mathcal L(D)$, which evaluates to $\deg D + 1 - g$ by the Riemman-Roch Theorem.
+	Therefore, the dimension of $C(\mathfrak C, \mathcal P, D)$ is $k = \dim \mathcal L(D)$, which evaluates to $\deg D + 1 - g$ by the Riemann-Roch Theorem.
 
 	Finally, let $f \neq g$ be polynomials such that $\psi(f)$ and $\psi(g)$ yield the minimum distance $d$.
 	Then, $\psi(f) - \psi(g) = \psi(f-g)$ and $\psi(g) - \psi(g) = \vec 0$ also yield the same distance $d$.
